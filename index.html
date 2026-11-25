@@ -18,9 +18,6 @@
   <meta property="og:image" content="https://pf-ferrum.ru/assets/og.jpg">
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="assets/hero.webp">
   <link rel="stylesheet" href="css/style.css">
 
@@ -91,7 +88,6 @@
 
 <!-- ============ HERO ============ -->
 <section class="hero" id="top">
-  <div class="hero__bg"><img src="assets/hero.webp" alt="" width="1920" height="1215" fetchpriority="high"></div>
   <div class="container">
     <div class="hero__grid">
       <div class="hero__content">
@@ -104,16 +100,23 @@
         </div>
       </div>
 
-      <aside class="hero-card" aria-label="Популярная продукция">
-        <div class="hero-card__tabs" role="tablist">
-          <button class="hero-card__tab" role="tab" aria-selected="true" data-img="assets/products/opory.webp" data-title="Шаровые опоры">Опоры</button>
-          <button class="hero-card__tab" role="tab" aria-selected="false" data-img="assets/products/nakonechniki.webp" data-title="Рулевые наконечники">Наконечники</button>
-          <button class="hero-card__tab" role="tab" aria-selected="false" data-img="assets/products/palcy.webp" data-title="Пальцы шаровые и рулевые">Пальцы</button>
-        </div>
-        <div class="hero-card__img"><img id="heroCardImg" src="assets/products/opory.webp" alt="Шаровые опоры" width="1200" height="800"></div>
-        <div class="hero-card__title" id="heroCardTitle">Шаровые опоры</div>
-        <a class="link-arrow" href="#products">Весь каталог <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
-      </aside>
+      <div class="hero__visual">
+        <div class="hero__bg"><img src="assets/hero.webp" alt="" width="1920" height="1215" fetchpriority="high"></div>
+        <aside class="hero-card" aria-label="Популярная продукция">
+          <div class="hero-card__tabs" role="tablist" aria-label="Группы популярной продукции">
+            <button id="heroTabSupports" class="hero-card__tab" role="tab" aria-controls="heroCardPanel" aria-selected="true" data-img="assets/products/opory.webp" data-title="Шаровые опоры">Опоры</button>
+            <button id="heroTabEnds" class="hero-card__tab" role="tab" aria-controls="heroCardPanel" aria-selected="false" tabindex="-1" data-img="assets/products/nakonechniki.webp" data-title="Рулевые наконечники">Наконечники</button>
+            <button id="heroTabPins" class="hero-card__tab" role="tab" aria-controls="heroCardPanel" aria-selected="false" tabindex="-1" data-img="assets/products/palcy.webp" data-title="Пальцы шаровые и рулевые">Пальцы</button>
+          </div>
+          <div class="hero-card__panel" id="heroCardPanel" role="tabpanel" aria-labelledby="heroTabSupports">
+            <div class="hero-card__img"><img id="heroCardImg" src="assets/products/opory.webp" alt="Шаровые опоры" width="1200" height="800"></div>
+            <div class="hero-card__info">
+              <div class="hero-card__title" id="heroCardTitle" aria-live="polite">Шаровые опоры</div>
+              <a class="link-arrow" href="#products">Весь каталог <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            </div>
+          </div>
+        </aside>
+      </div>
     </div>
 
     <nav class="hero__chips" aria-label="Разделы продукции">
@@ -136,11 +139,13 @@
 <!-- ============ BRANDS ============ -->
 <section class="brands" aria-label="Марки автомобилей">
   <div class="container"><p class="brands__label">Детали для автомобилей марок</p></div>
-  <div class="marquee" aria-hidden="true">
-    <img src="assets/brands-row1.svg" alt="" width="3346" height="70" loading="lazy"><img src="assets/brands-row1.svg" alt="" width="3346" height="70" loading="lazy">
-  </div>
-  <div class="marquee marquee--rev" aria-hidden="true">
-    <img src="assets/brands-row2.svg" alt="" width="3346" height="70" loading="lazy"><img src="assets/brands-row2.svg" alt="" width="3346" height="70" loading="lazy">
+  <div class="container brands__rows" role="group" aria-label="Логотипы автомобильных марок" tabindex="0">
+    <div class="marquee" aria-hidden="true">
+      <img src="assets/brands-row1.svg" alt="" width="3346" height="70" loading="lazy">
+    </div>
+    <div class="marquee marquee--rev" aria-hidden="true">
+      <img src="assets/brands-row2.svg" alt="" width="3346" height="70" loading="lazy">
+    </div>
   </div>
   <p class="sr-only">Toyota, Mercedes-Benz, BMW, Volvo, Suzuki, Renault, Hyundai, Chevrolet, ПАЗ, МАЗ, Урал, ГАЗ, UAZ, Lada, ЗиЛ</p>
 </section>
@@ -281,7 +286,7 @@
       <article class="service service--lg service--cta reveal">
         <span class="service__num">Расчёт</span>
         <div><h3>Пришлите чертёж или ТЗ</h3><p>Оценим сроки и стоимость обработки.</p>
-          <a class="btn btn--dark" href="#contacts" style="margin-top:20px">Отправить заявку</a></div>
+          <a class="btn btn--dark" href="#contacts">Отправить заявку</a></div>
       </article>
     </div>
   </div>
@@ -299,7 +304,7 @@
     </div>
 
     <div class="cycle reveal">
-      <div class="cycle__steps" role="tablist" aria-label="Этапы производства">
+      <div class="cycle__steps" role="tablist" aria-label="Этапы производства" aria-orientation="vertical">
         <button class="cycle__step" role="tab" id="t1" aria-controls="p1" aria-selected="true"><i>1</i>Заготовка</button>
         <button class="cycle__step" role="tab" id="t2" aria-controls="p2" aria-selected="false" tabindex="-1"><i>2</i>Термообработка</button>
         <button class="cycle__step" role="tab" id="t3" aria-controls="p3" aria-selected="false" tabindex="-1"><i>3</i>Гальваническое покрытие</button>
@@ -307,27 +312,27 @@
         <button class="cycle__step" role="tab" id="t5" aria-controls="p5" aria-selected="false" tabindex="-1"><i>5</i>Механическая обработка</button>
       </div>
 
-      <div class="cycle__panel" role="tabpanel" id="p1" aria-labelledby="t1">
+      <div class="cycle__panel" role="tabpanel" tabindex="0" id="p1" aria-labelledby="t1">
         <div><h3>Заготовка</h3><p>Современное оборудование даёт точную исходную форму заготовок с минимальными отходами. Так мы снижаем затраты и ускоряем весь цикл производства.</p></div>
         <div class="cycle__progress"><span class="on"></span><span></span><span></span><span></span><span></span></div>
         <span class="cycle__big" aria-hidden="true">01</span>
       </div>
-      <div class="cycle__panel" role="tabpanel" id="p2" aria-labelledby="t2" hidden>
+      <div class="cycle__panel" role="tabpanel" tabindex="0" id="p2" aria-labelledby="t2" hidden>
         <div><h3>Термообработка</h3><p>Точно контролируем нагрев и охлаждение. Деталь получает нужную твёрдость и износостойкость под конкретную задачу.</p></div>
         <div class="cycle__progress"><span class="on"></span><span class="on"></span><span></span><span></span><span></span></div>
         <span class="cycle__big" aria-hidden="true">02</span>
       </div>
-      <div class="cycle__panel" role="tabpanel" id="p3" aria-labelledby="t3" hidden>
+      <div class="cycle__panel" role="tabpanel" tabindex="0" id="p3" aria-labelledby="t3" hidden>
         <div><h3>Гальваническое покрытие</h3><p>Наносим на заготовки химическое фосфатное покрытие с омыливанием перед операцией высадки деталей.</p></div>
         <div class="cycle__progress"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></div>
         <span class="cycle__big" aria-hidden="true">03</span>
       </div>
-      <div class="cycle__panel" role="tabpanel" id="p4" aria-labelledby="t4" hidden>
+      <div class="cycle__panel" role="tabpanel" tabindex="0" id="p4" aria-labelledby="t4" hidden>
         <div><h3>Прессование</h3><p>Прессуем холодным и горячим методом под высоким давлением. Деталь получается прочнее, а себестоимость ниже.</p></div>
         <div class="cycle__progress"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span></div>
         <span class="cycle__big" aria-hidden="true">04</span>
       </div>
-      <div class="cycle__panel" role="tabpanel" id="p5" aria-labelledby="t5" hidden>
+      <div class="cycle__panel" role="tabpanel" tabindex="0" id="p5" aria-labelledby="t5" hidden>
         <div><h3>Механическая обработка</h3><p>Высокоточное резание, фрезерование и шлифование дают точную геометрию и чистую поверхность детали.</p></div>
         <div class="cycle__progress"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></div>
         <span class="cycle__big" aria-hidden="true">05</span>
@@ -361,7 +366,7 @@
         <h2>История в деталях</h2>
       </div>
     </div>
-    <ol class="timeline reveal" style="list-style:none;margin:0;padding:0">
+    <ol class="timeline reveal">
       <li class="tl"><span class="tl__year">1999</span><span class="tl__dot"></span><p>Производство малых серий</p></li>
       <li class="tl"><span class="tl__year">2005</span><span class="tl__dot"></span><p>Полное обеспечение собственного производства, выход за пределы региона</p></li>
       <li class="tl"><span class="tl__year">2008</span><span class="tl__dot"></span><p>Контракты на поставку для 10 промышленных предприятий региона</p></li>
@@ -395,7 +400,7 @@
       </div>
     </div>
     <div class="lead-block">
-      <figure class="quote reveal" style="margin:0">
+      <figure class="quote reveal">
         <svg class="quote__mark" aria-hidden="true"><use href="#i-quote"/></svg>
         <blockquote>Многолетнее сотрудничество подтверждает качество нашей продукции. Будем рады долгосрочной работе с вами.</blockquote>
         <figcaption class="quote__person">
@@ -431,13 +436,13 @@
       <h3>Заявка в отдел продаж</h3>
       <div class="field">
         <label for="f-name">Имя или компания</label>
-        <input id="f-name" name="name" type="text" autocomplete="organization" required>
-        <span class="error" aria-live="polite"></span>
+        <input id="f-name" name="name" type="text" autocomplete="organization" aria-describedby="f-name-error" required>
+        <span id="f-name-error" class="error" aria-live="polite"></span>
       </div>
       <div class="field">
         <label for="f-phone">Телефон</label>
-        <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7" required>
-        <span class="error" aria-live="polite"></span>
+        <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7" aria-describedby="f-phone-error" required>
+        <span id="f-phone-error" class="error" aria-live="polite"></span>
       </div>
       <div class="field">
         <label for="f-msg">Что нужно (артикулы, объём)</label>
@@ -494,9 +499,8 @@
       <a href="politika_konfidentsialnosti/">Политика обработки персональных данных</a>
     </div>
   </div>
+  <a class="fab" href="https://max.ru/u/f9LHodD0cOIPjQpDLJcG_gZLdwAc3dzEbi4NWwQcr8_NQFJjHxBjDzo1TbI" target="_blank" rel="noopener" aria-label="Написать в отдел продаж"><svg aria-hidden="true"><use href="#i-chat"/></svg></a>
 </footer>
-
-<a class="fab" href="https://max.ru/u/f9LHodD0cOIPjQpDLJcG_gZLdwAc3dzEbi4NWwQcr8_NQFJjHxBjDzo1TbI" target="_blank" rel="noopener" aria-label="Написать в отдел продаж"><svg aria-hidden="true"><use href="#i-chat"/></svg></a>
 
 <script src="js/main.js" defer></script>
 
