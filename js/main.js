@@ -1,6 +1,34 @@
 (() => {
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* Активный раздел в основном и мобильном меню */
+  const header = $('#header');
+  const sectionLinks = $$('.nav a, .mobile-menu__link');
+  const sections = $$('.nav a').map(link => document.getElementById(link.hash.slice(1))).reverse();
+  let currentSection;
+  let navigationFrame;
+  function updateNavigation() {
+    navigationFrame = undefined;
+    const headerEdge = header.getBoundingClientRect().bottom + 20;
+    const current = sections.find(section => section.getBoundingClientRect().top <= headerEdge);
+    if (currentSection === current) return;
+    currentSection = current;
+    sectionLinks.forEach(link => {
+      if (link.hash.slice(1) === current?.id) {
+        link.setAttribute('aria-current', 'location');
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
+  }
+  const scheduleNavigation = () => {
+    if (navigationFrame === undefined) navigationFrame = requestAnimationFrame(updateNavigation);
+  };
+  window.addEventListener('scroll', scheduleNavigation, { passive: true });
+  window.addEventListener('resize', scheduleNavigation);
+  scheduleNavigation();
 
   /* Мобильное меню */
   const burger = $('#burger');
@@ -24,8 +52,17 @@
     if (!event.matches) setMenu(false);
   });
 
+  function animatePanelContent(element) {
+    if (reducedMotion.matches || !element.animate) return;
+    element.animate(
+      [{ opacity: .65, transform: 'translateY(5px)' }, { opacity: 1, transform: 'translateY(0)' }],
+      { duration: 180, easing: 'ease-out' }
+    );
+  }
+
   function bindTabs(tabs, updatePanel, vertical = false) {
     const select = (tab) => {
+      if (tab.getAttribute('aria-selected') === 'true') return;
       tabs.forEach(item => {
         item.setAttribute('aria-selected', String(item === tab));
         item.tabIndex = item === tab ? 0 : -1;
@@ -53,17 +90,27 @@
   const cardImg = $('#heroCardImg');
   const cardTitle = $('#heroCardTitle');
   const cardPanel = $('#heroCardPanel');
+  let productImage;
   bindTabs($$('.hero-card__tab'), tab => {
+    cardImg.getAnimations().forEach(animation => animation.cancel());
     cardImg.src = tab.dataset.img;
     cardImg.alt = tab.dataset.title;
     cardTitle.textContent = tab.dataset.title;
     cardPanel.setAttribute('aria-labelledby', tab.id);
+    const decoded = cardImg.decode();
+    productImage = decoded;
+    decoded.then(() => {
+      if (productImage === decoded) animatePanelContent(cardImg);
+    }).catch(() => {});
   });
 
   const cyclePanels = $$('.cycle__panel');
   bindTabs($$('.cycle__step'), tab => {
     const activePanel = tab.getAttribute('aria-controls');
     cyclePanels.forEach(panel => { panel.hidden = panel.id !== activePanel; });
+    const content = $('#' + activePanel).firstElementChild;
+    content.getAnimations().forEach(animation => animation.cancel());
+    animatePanelContent(content);
   }, true);
 
   /* Год в подвале */

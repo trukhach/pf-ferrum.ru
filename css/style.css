@@ -39,6 +39,9 @@
   --container: 1440px;
   --gutter: clamp(18px, 4vw, 56px);
   --header-h: 76px;
+  --motion-fast: 160ms;
+  --motion-panel: 240ms;
+  --motion-ease: cubic-bezier(.2, .7, .3, 1);
   --font: "Golos Text", "Segoe UI", Arial, sans-serif;
   --technical: ui-monospace, "Cascadia Mono", Consolas, monospace;
 }
@@ -111,14 +114,33 @@ p, figure { margin: 0; }
 .header__inner { height: 100%; display: flex; align-items: center; gap: clamp(14px, 2.3vw, 36px); }
 .header__logo, .header__phone { flex: none; }
 .header__logo img { width: auto; height: 29px; }
-.nav { display: flex; align-items: center; justify-content: center; gap: clamp(13px, 1.7vw, 27px); margin-inline: auto; }
-.nav a { font-size: 14px; color: var(--muted); white-space: nowrap; padding: 10px 0; }
-.nav a:hover { color: var(--text); text-decoration: underline; text-underline-offset: 5px; }
+.nav {
+  display: flex; align-items: center; margin-inline: auto; padding: 3px;
+  border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-2);
+}
+.nav a {
+  position: relative; min-height: 36px; padding: 8px clamp(9px, 1.15vw, 18px);
+  font-size: 14px; color: var(--muted); white-space: nowrap;
+  transition: background-color var(--motion-fast), color var(--motion-fast);
+}
+.nav a:hover, .nav a[aria-current="location"] { color: var(--text); background: var(--surface); }
+.nav a[aria-current="location"]::after {
+  content: ""; position: absolute; bottom: 0; left: 10px; right: 10px; height: 2px;
+  background: var(--accent);
+}
+.nav a:focus-visible { z-index: 1; outline-offset: -2px; }
 .header__phone { font-weight: 650; font-size: 14px; font-variant-numeric: tabular-nums; line-height: 1.35; }
 .header__phone small { display: block; font-weight: 400; font-size: 12px; color: var(--muted); }
 .header .btn { min-height: 42px; flex: none; }
-.burger { display: none; width: 44px; height: 44px; border-radius: var(--radius); border: 1px solid var(--line-strong); background: var(--surface); position: relative; }
-.burger span { position: absolute; left: 12px; right: 12px; height: 2px; background: var(--text); }
+.burger {
+  display: none; min-height: 44px; padding: 0 38px 0 12px; border-radius: var(--radius);
+  border: 1px solid var(--line-strong); background: var(--surface);
+  position: relative; font-size: 14px; font-weight: 650;
+}
+.burger span {
+  position: absolute; right: 11px; width: 16px; height: 2px; background: var(--text);
+  transition: transform var(--motion-fast), opacity var(--motion-fast);
+}
 .burger span:nth-child(1) { top: 14px; }
 .burger span:nth-child(2) { top: 20px; }
 .burger span:nth-child(3) { top: 26px; }
@@ -127,11 +149,28 @@ p, figure { margin: 0; }
 .menu-open .burger span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 .mobile-menu {
   display: none; position: fixed; inset: var(--header-h) 0 0; z-index: 49;
-  overflow-y: auto; background: var(--bg-2); padding: 16px var(--gutter) 32px;
+  overflow-y: auto; background: var(--bg-2); padding: 24px max(var(--gutter), (100% - 600px) / 2) 32px;
   flex-direction: column;
 }
-.menu-open .mobile-menu { display: flex; }
-.mobile-menu__link { padding: 13px 0; border-bottom: 1px solid var(--line); font-size: 22px; font-weight: 600; }
+.menu-open .mobile-menu { display: flex; animation: menu-enter var(--motion-panel) var(--motion-ease); }
+@keyframes menu-enter {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.mobile-menu__link {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px; border: 1px solid var(--line);
+  font-size: clamp(20px, 4.5vw, 28px); font-weight: 600; line-height: 1.2;
+}
+.mobile-menu__link + .mobile-menu__link { border-top: 0; }
+.mobile-menu__link::after {
+  content: ""; width: 8px; height: 8px; flex: none; margin-right: 3px;
+  border: solid var(--muted); border-width: 1px 1px 0 0; transform: rotate(45deg);
+}
+.mobile-menu__link:hover, .mobile-menu__link[aria-current="location"] { background: var(--surface); }
+.mobile-menu__link[aria-current="location"] { box-shadow: inset 3px 0 var(--accent); }
+.mobile-menu__link[aria-current="location"]::after { border-color: var(--accent-text); }
+.mobile-menu__link:focus-visible { outline-offset: -4px; }
 .mobile-menu__contacts { margin-top: auto; padding-top: 26px; display: grid; gap: 14px; }
 .mobile-menu__contacts a:not(.btn) { width: fit-content; }
 
@@ -409,5 +448,6 @@ p, figure { margin: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .menu-open .mobile-menu { animation: none; }
   *, *::before, *::after { transition-duration: 0s !important; }
 }
